@@ -1,0 +1,15 @@
+services:
+  car-price-app:
+    build:
+    
+      context: ..
+      dockerfile: app/Dockerfile
+
+    image: a1-predicting-car-price
+
+    ports:
+      
+      - "8050:8050"
+
+    # Restarting automatically if the container stops unexpectedly
+    restart: unless-stopped

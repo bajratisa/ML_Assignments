@@ -1,0 +1,128 @@
+{
+  "model_type": "Random Forest",
+  "best_params": {
+    "n_estimators": 100,
+    "max_depth": 20,
+    "min_samples_leaf": 4
+  },
+  "numeric_features": [
+    "year",
+    "km_driven",
+    "mileage",
+    "engine",
+    "max_power",
+    "seats",
+    "owner"
+  ],
+  "categorical_features": [
+    "brand",
+    "fuel",
+    "seller_type",
+    "transmission"
+  ],
+  "all_features": [
+    "year",
+    "km_driven",
+    "mileage",
+    "engine",
+    "max_power",
+    "seats",
+    "owner",
+    "brand",
+    "fuel",
+    "seller_type",
+    "transmission"
+  ],
+  "brands": [
+    "Ambassador",
+    "Audi",
+    "BMW",
+    "Chevrolet",
+    "Daewoo",
+    "Datsun",
+    "Fiat",
+    "Force",
+    "Ford",
+    "Honda",
+    "Hyundai",
+    "Isuzu",
+    "Jaguar",
+    "Jeep",
+    "Kia",
+    "Land",
+    "Lexus",
+    "MG",
+    "Mahindra",
+    "Maruti",
+    "Mercedes-Benz",
+    "Mitsubishi",
+    "Nissan",
+    "Opel",
+    "Peugeot",
+    "Renault",
+    "Skoda",
+    "Tata",
+    "Toyota",
+    "Volkswagen",
+    "Volvo"
+  ],
+  "fuel_types": [
+    "Diesel",
+    "Petrol"
+  ],
+  "seller_types": [
+    "Dealer",
+    "Individual",
+    "Trustmark Dealer"
+  ],
+  "transmission_types": [
+    "Automatic",
+    "Manual"
+  ],
+  "feature_ranges": {
+    "year": {
+      "min": 1983.0,
+      "max": 2020.0,
+      "median": 2014.0
+    },
+    "km_driven": {
+      "min": 1000.0,
+      "max": 2360457.0,
+      "median": 70000.0
+    },
+    "mileage": {
+      "min": 9.0,
+      "max": 28.4,
+      "median": 19.4
+    },
+    "engine": {
+      "min": 624.0,
+      "max": 3604.0,
+      "median": 1248.0
+    },
+    "max_power": {
+      "min": 34.2,
+      "max": 282.0,
+      "median": 81.86
+    },
+    "seats": {
+      "min": 2.0,
+      "max": 14.0,
+      "median": 5.0
+    },
+    "owner": {
+      "min": 1.0,
+      "max": 4.0,
+      "median": 1.0
+    }
+  },
+  "performance": {
+    "cv_mse": 0.0527,
+    "test_mse": 0.0513,
+    "test_r2": 0.9077,
+    "median_percent_error": 11.8,
+    "within_20_percent": 72.1
+  },
+  "target_note": "The model predicts the natural log of the price. Apply np.exp to the prediction.",
+  "size_note": "Reduced from 400 to fewer trees for deployment. The grid search showed that 200 trees scored identically to 400, so the extra trees added file size without adding accuracy."
+}

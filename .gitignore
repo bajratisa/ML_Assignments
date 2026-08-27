@@ -1,0 +1,22 @@
+# Python cache files, regenerated automatically so no need to store them
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter checkpoint files, which are autosaves rather than real work
+.ipynb_checkpoints/
+
+# Virtual environments, which are large and machine specific
+.venv/
+venv/
+env/
+
+# Windows and editor clutter
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Large or temporary files
+*.log
+*.tmp

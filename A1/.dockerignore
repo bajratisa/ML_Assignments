@@ -1,0 +1,13 @@
+
+
+*.ipynb
+.ipynb_checkpoints/
+Cars.csv
+le_cars_data.csv
+README.md
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.venv/
+venv/
