@@ -1,0 +1,113 @@
+{
+  "model": "Normal regression, polynomial degree 2, batch gradient descent",
+  "params": {
+    "lr": 0.01,
+    "init": "zeros",
+    "momentum": 0.9,
+    "epochs": 500
+  },
+  "numeric_features": [
+    "year",
+    "km_driven",
+    "mileage",
+    "engine",
+    "max_power",
+    "seats",
+    "owner"
+  ],
+  "categorical_features": [
+    "brand",
+    "fuel",
+    "seller_type",
+    "transmission"
+  ],
+  "brands": [
+    "Ambassador",
+    "Audi",
+    "BMW",
+    "Chevrolet",
+    "Daewoo",
+    "Datsun",
+    "Fiat",
+    "Force",
+    "Ford",
+    "Honda",
+    "Hyundai",
+    "Isuzu",
+    "Jaguar",
+    "Jeep",
+    "Kia",
+    "Land",
+    "Lexus",
+    "MG",
+    "Mahindra",
+    "Maruti",
+    "Mercedes-Benz",
+    "Mitsubishi",
+    "Nissan",
+    "Opel",
+    "Peugeot",
+    "Renault",
+    "Skoda",
+    "Tata",
+    "Toyota",
+    "Volkswagen",
+    "Volvo"
+  ],
+  "fuel_types": [
+    "Diesel",
+    "Petrol"
+  ],
+  "seller_types": [
+    "Dealer",
+    "Individual",
+    "Trustmark Dealer"
+  ],
+  "transmission_types": [
+    "Automatic",
+    "Manual"
+  ],
+  "feature_ranges": {
+    "year": {
+      "min": 1983.0,
+      "max": 2020.0,
+      "median": 2014.0
+    },
+    "km_driven": {
+      "min": 1000.0,
+      "max": 2360457.0,
+      "median": 70000.0
+    },
+    "mileage": {
+      "min": 9.0,
+      "max": 28.4,
+      "median": 19.4
+    },
+    "engine": {
+      "min": 624.0,
+      "max": 3604.0,
+      "median": 1248.0
+    },
+    "max_power": {
+      "min": 34.2,
+      "max": 282.0,
+      "median": 81.86
+    },
+    "seats": {
+      "min": 2.0,
+      "max": 14.0,
+      "median": 5.0
+    },
+    "owner": {
+      "min": 1.0,
+      "max": 4.0,
+      "median": 1.0
+    }
+  },
+  "performance": {
+    "cv_mse": 0.0673,
+    "test_mse": 0.0644,
+    "test_r2": 0.8841,
+    "median_percent_error": 14.5
+  }
+}

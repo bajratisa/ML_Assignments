@@ -20,3 +20,7 @@ desktop.ini
 # Large or temporary files
 *.log
 *.tmp
+
+# MLflow tracking database, which grows large and holds run data rather than code
+mlflow.db
+mlruns/

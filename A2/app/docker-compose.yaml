@@ -1,0 +1,9 @@
+services:
+  car-price-app:
+    build:
+      context: ..
+      dockerfile: app/Dockerfile
+
+    image: tisa99/a2-predicting-car-price:latest
+
+    restart: unless-stopped
