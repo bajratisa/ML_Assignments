@@ -1,0 +1,118 @@
+name: A3 CI/CD
+
+# Runs only when something under A3/ changes on main, so A1 and A2 pushes do not trigger it.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "A3/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Get the repository contents onto the runner.
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The tests import the model class, so they need the same libraries as the app.
+      - name: Install dependencies
+        run: pip install -r A3/requirements.txt pytest
+
+      # Run from inside A3 so that "pythonpath = ." in A3/pytest.ini points at A3 and the
+      # tests can import app.logistic_regression.
+      - name: Run unit tests
+        working-directory: A3
+        run: pytest
+
+  deploy:
+    # Only runs if every test passed. A failed test means nothing is deployed.
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Loads the private key from the repository secret into an ssh-agent, so the key is
+      # never written to a file in the workspace. Pinned to a specific version.
+      - name: Load SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.MLSERVER_SSH_KEY }}
+
+      # Without this, the first connection stops and asks "are you sure you want to continue
+      # connecting?", which nobody can answer on a CI runner. The two hosts have to be added
+      # to known_hosts ahead of time.
+      - name: Trust the server host keys
+        env:
+          BAZOOKA_HOST: ${{ secrets.BAZOOKA_HOST }}
+          MLSERVER_HOST: ${{ secrets.MLSERVER_HOST }}
+          MLSERVER_USER: ${{ secrets.MLSERVER_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # bazooka is reachable from the internet, so scan it directly.
+          ssh-keyscan -T 15 "$BAZOOKA_HOST" >> ~/.ssh/known_hosts
+
+          # The ML server normally sits behind bazooka, so a direct scan can come back empty.
+          # If it does, ask bazooka to scan it from the inside.
+          scan="$(ssh-keyscan -T 15 "$MLSERVER_HOST" 2>/dev/null || true)"
+          if [ -z "$scan" ]; then
+            echo "Direct scan of the ML server returned nothing, scanning through bazooka."
+            scan="$(ssh -o StrictHostKeyChecking=accept-new "$MLSERVER_USER@$BAZOOKA_HOST" \
+              "ssh-keyscan -T 15 $MLSERVER_HOST" 2>/dev/null || true)"
+          fi
+          if [ -z "$scan" ]; then
+            echo "::error::Could not get a host key for the ML server."
+            exit 1
+          fi
+          echo "$scan" >> ~/.ssh/known_hosts
+
+      # The ML server cannot be reached directly from outside. ProxyJump makes ssh and scp
+      # connect to bazooka first and tunnel through it to the ML server, which is the same
+      # setup as the config used when testing by hand. The hostnames and user come from
+      # secrets so they are not stored in the repository.
+      - name: Write SSH config
+        env:
+          BAZOOKA_HOST: ${{ secrets.BAZOOKA_HOST }}
+          MLSERVER_HOST: ${{ secrets.MLSERVER_HOST }}
+          MLSERVER_USER: ${{ secrets.MLSERVER_USER }}
+        run: |
+          cat > ~/.ssh/config <<EOF
+          Host bazooka
+              HostName $BAZOOKA_HOST
+              User $MLSERVER_USER
+
+          Host mlserver
+              HostName $MLSERVER_HOST
+              User $MLSERVER_USER
+              ProxyJump bazooka
+          EOF
+          chmod 600 ~/.ssh/config
+
+      # mkdir -p does nothing if the folder already exists, so this is safe on every run.
+      - name: Copy the compose file to the server
+        run: |
+          ssh mlserver "mkdir -p ~/st126686-a3-app"
+          scp A3/docker-compose-deploy.yaml mlserver:~/st126686-a3-app/docker-compose-deploy.yaml
+
+      # Pull the latest image, then start (or restart) the container with it.
+      - name: Pull the image and start the container
+        run: |
+          ssh mlserver "cd ~/st126686-a3-app && docker compose -f docker-compose-deploy.yaml pull && docker compose -f docker-compose-deploy.yaml up -d"
+
+      # A last look at whether the container is running. This does not fail the job when the
+      # container is missing, because the Docker network on the deployment VM is currently
+      # broken (a known infrastructure problem). The deployment steps above already succeeded
+      # by this point, so an empty result gets a visible warning instead of a red build.
+      - name: Check the container is running
+        run: |
+          result="$(ssh mlserver "docker ps | grep st126686-a3" || true)"
+          if [ -n "$result" ]; then
+            echo "$result"
+          else
+            echo "::warning::No running container matching st126686-a3 was found on the ML server. The VM Docker network is known to be broken, so check it by hand."
+          fi
