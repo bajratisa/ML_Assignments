@@ -1,0 +1,5 @@
+dash==4.4.1
+pandas==3.0.5
+numpy==2.4.1
+scikit-learn==1.8.0
+joblib==1.5.3

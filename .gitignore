@@ -24,3 +24,7 @@ desktop.ini
 # MLflow tracking database, which grows large and holds run data rather than code
 mlflow.db
 mlruns/
+
+# MLflow artifacts and pytest cache
+mlartifacts/
+.pytest_cache/

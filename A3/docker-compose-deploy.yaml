@@ -1,0 +1,21 @@
+
+
+services:
+  web-st126686:
+    image: tisa99/a3-predicting-car-price:latest
+    restart: unless-stopped
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-st126686-a3.rule=Host(`web-st126686-a3.ml.brain.cs.ait.ac.th`)
+      - traefik.http.routers.web-st126686-a3.entrypoints=websecure
+      - traefik.http.routers.web-st126686-a3.tls=true
+      - traefik.http.routers.web-st126686-a3.tls.certresolver=letsencrypt
+      - traefik.http.services.web-st126686-a3.loadbalancer.server.port=8050
+
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
