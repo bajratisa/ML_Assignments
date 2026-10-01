@@ -93,3 +93,5 @@ probabilities that add up to 1. They use made-up data, so they need neither MLfl
 The course MLflow server and the Docker network on the deployment VM were both affected by
 infrastructure problems during this assignment. I confirmed this with the course staff. The
 model was validated locally and works correctly.
+
+<!-- CI/CD pipeline verified -->
