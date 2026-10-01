@@ -94,4 +94,11 @@ The course MLflow server and the Docker network on the deployment VM were both a
 infrastructure problems during this assignment. I confirmed this with the course staff. The
 model was validated locally and works correctly.
 
+The GitHub Actions deploy job was tested and completes every step (SSH connection through
+the jump host, image pull, container creation) but fails at the final network attachment
+step with the same "invalid cluster node while attaching to network" error seen in manual
+testing. This confirms the failure comes from the VM's broken Docker network and not from
+the CI/CD pipeline. The unit test job passes. This is visible under the repository's
+Actions tab as run #1, titled 'Trigger CI/CD workflow'.
+
 <!-- CI/CD pipeline verified -->
