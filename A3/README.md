@@ -52,10 +52,18 @@ The course MLflow server was unstable, so, following the instructor's update, I 
 experiments to a local MLflow instance instead. The required screenshots are in
 `screenshots/`:
 
-- `mlflow_runs_overview.png` — the list of runs in the `st126686-a3` experiment
-- `mlflow_best_run_metrics.png` — the best run, `lr0.5_it3000_l0.0001`, with its metrics
-- `mlflow_model_registry.png` — the registered model `st126686-a3-model`, version 1, with
-  the `staging` alias
+`mlflow_runs_overview.png` — the list of runs in the `st126686-a3` experiment
+
+![MLflow runs overview, the list of runs in the st126686-a3 experiment](screenshots/mlflow_runs_overview.png)
+
+`mlflow_best_run_metrics.png` — the best run, `lr0.5_it3000_l0.0001`, with its metrics
+
+![MLflow best run lr0.5_it3000_l0.0001 with its metrics](screenshots/mlflow_best_run_metrics.png)
+
+`mlflow_model_registry.png` — the registered model `st126686-a3-model`, version 1, with
+the `staging` alias
+
+![MLflow model registry showing st126686-a3-model version 1 with the staging alias](screenshots/mlflow_model_registry.png)
 
 The best run by validation macro f1 was `lr0.5_it3000_l0.0001`: 0.7379 on validation and
 0.7348 on the test set. The top six runs were all within about 0.003 of each other on
